@@ -1,0 +1,49 @@
+main {
+  margin-left: 5%;
+  margin-right: 5%;
+  height: 100%;
+
+  & > .table-container {
+    height: 60.5%;
+    overflow: hidden;
+  }
+}
+
+.mat-mdc-form-field {
+  margin-top: 7%;
+  font-size: 14px;
+  width: 35%;
+}
+
+@media (max-width: 750px) {
+  .mat-mdc-form-field {
+    width: 55%;
+  }
+}
+
+.mat-not-found {
+  width: 100%;
+  text-align: center;
+  font-size: 1.4rem;
+  height: 25vh;
+}
+
+.mat-column-number {
+  width: 15%;
+}
+
+.mat-column-name {
+  width: 30%;
+}
+
+.mat-column-weight {
+  width: 25%;
+}
+
+.mat-column-symbol {
+  width: 25%;
+}
+
+.mat-column-actions {
+  width: 5%;
+}

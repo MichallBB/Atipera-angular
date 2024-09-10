@@ -1,0 +1,31 @@
+<header mat-dialog-title>Edit element</header>
+<section mat-dialog-content>
+  <form [formGroup]="formGroup">
+    <mat-form-field>
+      <mat-label>Name</mat-label>
+      <input [value]="data.name" formControlName="name" matInput required />
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Weight</mat-label>
+      <input
+        class="no-arrows"
+        type="number"
+        [value]="data.weight"
+        formControlName="weight"
+        matInput
+        required
+      />
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Symbol</mat-label>
+      <input [value]="data.symbol" formControlName="symbol" matInput required />
+    </mat-form-field>
+  </form>
+</section>
+
+<footer mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">Back</button>
+  <button mat-raised-button (click)="onSave()">Submit</button>
+</footer>

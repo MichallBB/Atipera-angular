@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { PeriodicElement } from './models/periodic-element.model';
 import { MatButtonModule } from '@angular/material/button';
@@ -8,8 +8,9 @@ import { MatInputModule } from '@angular/material/input';
 import { MatIcon } from '@angular/material/icon';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { EditDialogComponent } from './edit-dialog/edit-dialog.component';
-import { debounceTime, delay, Observable, of, Subject } from 'rxjs';
+import { concatMap, debounceTime, Subject, tap } from 'rxjs';
 import { PeriodicElementSerivce } from './services/element.service';
+import { rxState, RxState } from '@rx-angular/state';
 
 @Component({
   selector: 'app-root',
@@ -23,6 +24,7 @@ import { PeriodicElementSerivce } from './services/element.service';
     MatIcon,
     MatDialogModule,
   ],
+  providers: [RxState],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
@@ -41,17 +43,24 @@ export class AppComponent {
 
   constructor(
     private dialog: MatDialog,
-    private periodicElementSerivce: PeriodicElementSerivce
+    private periodicElementSerivce: PeriodicElementSerivce,
+    private state: RxState<{ dataSource: PeriodicElement[] }>
   ) {}
 
   ngOnInit() {
-    this.periodicElementSerivce.getData().subscribe((data) => {
-      this.dataSource.data = data;
-    });
+    this.state.connect(
+      'dataSource',
+      this.periodicElementSerivce
+        .getData()
+        .pipe(tap((data) => (this.dataSource.data = data)))
+    );
 
-    this.searchSubject.pipe(debounceTime(2000)).subscribe((searchText) => {
-      this.dataSource.filter = searchText.trim().toLowerCase();
-    });
+    this.state.hold(
+      this.searchSubject.pipe(debounceTime(2000)),
+      (searchText) => {
+        this.dataSource.filter = searchText.trim().toLowerCase();
+      }
+    );
   }
 
   applyFilter(event: Event) {
